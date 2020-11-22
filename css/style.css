@@ -1,0 +1,490 @@
+/* Setup box sizing, do this for every project it will 
+make things easier. It Changes how padding is calculated
+to make it within a width instead of adding on the total
+ width of something */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* \/\/\/\/\/\/\/\/\/\/\ */
+/* Custom properties, update these for your own design */
+
+:root {
+  /* Font Family */
+  --ff-primary: 'Source Sans Pro', sans-serif;
+  --ff-secondary: 'Source Code Pro', monospace;
+
+  /* Font weight */
+  --fw-reg: 300;
+  --fw-bold: 900;
+
+  /* Colors */
+  --clr-light: #fff;
+  --clr-dark: #303030;
+  --clr-accent: #16e0bd;
+
+  /* Font sizes */
+  --fs-h1: 3rem;
+  --fs-h2: 2.25rem;
+  --fs-h3: 1.25rem;
+  --fs-body: 1rem;
+  
+  /* Box shadow */
+  /* right down blur rgba */
+  --bs: 0.25em 0.25em 0.75em rgba(0,0,0,.25),
+        0.125em 0.125em 0.25em rgba(0,0,0,.15); /*two layers of shadows to give a realistic effect */
+}
+
+/* Media Query */
+/* Will adjust with screen sizes */
+/*  generic 300 up - 600 up - 900 up */
+/* Here for bigger screens 800px + */
+@media (min-width: 800px) {
+  :root {
+    --fs-h1: 4.5rem;
+    --fs-h2: 3.75rem;
+    --fs-h3: 1.5rem;
+    --fs-body: 1.125rem;
+  }
+}
+
+/* \/\/\/\/\/\/\/\/\/\/\ */
+/* General Styles */
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  background: var(--clr-light);
+  color: var(--clr-dark);
+  margin: 0;
+  font-family: var(--ff-primary);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+}
+
+section {
+  padding: 5em 2em; /* top-bottom right-left */
+}
+
+img {
+  display: block;
+  max-width: 100%; /* so imgs don't grow bigger */
+}
+
+strong { font-weight: var(--fw-bold); }
+
+/* focus for everthing properties when tab */
+:focus {
+  outline: 3px solid var(--clr-accent);
+  outline-offset: 3px;
+}
+
+/* \/\/\/\/\/\/\/\/\/\/\ */
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: .5em 2.5em;
+  background: var(--clr-accent);
+  color: var(--clr-dark);
+  text-decoration: none; /* removes underline of link */
+  cursor: pointer;
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: var(--fw-bold);
+  transition: transform 200ms ease-in-out;
+}
+
+.btn:hover {
+  transform: scale(1.1);
+}
+/* \/\/\/\/\/\/\/\/\/\/\ */
+/* Typography */
+
+h1,
+h2,
+h3 {
+  line-height: 1;
+  margin: 0;
+}
+
+h1 { font-size: var(--fs-h1) }
+h2 { font-size: var(--fs-h2) }
+h3 { font-size: var(--fs-h3) }
+
+.section__title {
+  margin-bottom: .25em;
+}
+
+.section__title--intro {
+  font-weight: var(--fw-reg);
+}
+
+.section__title--intro strong {
+   /* This will make Jane Smith always ends up on its own
+   line, not always recommended */
+  display: block;
+}
+
+.section__subtitle {
+  margin:0;
+  font-size: var(--fs-h3);
+}
+
+.section__subtitle--intro,
+.section__subtitle--about {
+  background: var(--clr-accent);
+  font-family: var(--ff-secondary);
+  padding: .25em 1em;
+  margin-bottom: 1em;
+}
+
+/* \/\/\/\/\/\/\/\/\/\/\ */
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1em;
+}
+
+.logo {
+  max-width: 100px;
+}
+
+.nav {
+  position: fixed;
+  background: var(--clr-dark);
+  color: var(--clr-light);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  transform: translateX(100%);
+  transition: transofrm 250 cubic-bezier(.5,0,.5,1);
+}
+
+.nav__list {
+  list-style: none;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.nav__link {
+  color: inherit;
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h2);
+  text-decoration: none;
+}
+
+.nav__link:hover {
+  color: var(--clr-accent);
+}
+
+/* Toggle button */
+.nav-toggle {
+  padding: .5em;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  position: absolute;
+  right: 1em;
+  top: 1em;
+  z-index: 1000;
+}
+
+/* clicking on the button, to test js */
+/* .nav-open {
+  background: red;
+} */
+.nav-open .nav { /* when nav-open style .nav */
+  transform: translateX(0);
+}
+
+.nav-open .nav-toggle {
+  position: fixed; /* this will make it's position fixed even when scrolling */
+}
+
+.nav-open .hamburger {
+  transform: rotate(.625turn);
+}
+
+.nav-open .hamburger::before{
+  transform: rotate(90deg) translateX(-6px);
+}
+
+.nav-open .hamburger::after {
+  opacity: 0;
+}
+/* \/\/\/\/\/\/\/\/\/\/\ */
+/* Hamburger */
+/* This is the complicated way, but it opens many extra possibalities */
+.hamburger {
+  display: block;
+  position: relative;
+}
+
+.hamburger,
+.hamburger::before,
+.hamburger::after {
+  background: var(--clr-accent);
+  width: 2em;
+  height: 3px;
+  border-radius: 1em;
+  transition: transform 250ms ease-in-out;
+}
+
+/* pseudo elements */
+.hamburger::before,
+.hamburger::after {
+  content: ''; /* need to give pseudo elements content or will not appear */
+  position: absolute; /* its either giving position or display property is required */
+  left: 0;
+  right: 0;
+}
+/* height of 3 and then empty space of 3 that's why 6 */
+.hamburger::before { top: 6px; }
+.hamburger::after { bottom: 6px; }
+
+/* \/\/\/\/\/\/\/\/\/\/\ */
+/* Layout */
+/* Intro section */
+.intro {
+  position: relative;
+}
+
+.intro__img {
+  box-shadow: var(--bs);
+}
+
+.section__subtitle--intro {
+  display: inline-block;
+}
+
+@media (min-width: 600px) {
+  .intro {
+    display: grid; /* using grid */
+    width: min-content;
+    margin: 0 auto;
+    grid-column-gap: 1em;
+    grid-template-areas:
+      "img title"
+      "img subtitle";
+    grid-template-columns: min-content max-content;
+  }
+
+  .intro__img {
+    grid-area: img;
+    min-width: 250px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .section__subtitle--intro {
+    align-self: start; /* to stop it from stretching down */
+    /* starting at the top and ending on the last row automatically */
+    grid-column: -1 / 1; /* stretch the length to the grid */
+    grid-row: 2; /* second grid row */
+    text-align: right; /* to set text alignment */
+    position: relative;
+    left: -1.5em; /* this will pull it to the left */
+    width: calc(100% + 1.5em); /* after pulling it will make the width smaller so we added 0.5em to the total width */
+  }
+}
+
+/* My services section */
+/* Small screens */
+.my-services {
+  /* Here we put the color & image incase the image doesn't load
+  the viewer will still be able to read the white text */
+  background-color: var(--clr-dark);
+  background-image: url(../img/services-bg.jpg);
+  background-size: cover;
+  /* background-blend-mode: multiply; */ /* This will make it darker in color */
+  color: var(--clr-light);
+  text-align: center;
+}
+
+.section__title--services {
+  color: var(--clr-accent);
+  position: relative;
+}
+
+.section__title--services::after {
+  /* pseudo element to create line */
+  content: ''; /* need to give pseudo elements content or will not appear */
+  display: block;
+  width: 2em;
+  height: 1px;
+  margin: 0.5em auto 1em; /* top left&right bottom */
+  background: currentColor; /* current color will match section title services */
+  opacity: 0.25em;
+}
+
+.services {
+  margin-bottom: 4em;
+}
+
+.service {
+  max-width: 500px;
+  margin: 0 auto;
+}
+/* Bigger screens: it will split to multiple columns */
+@media (min-width: 800px) {
+  .services {
+    display: flex;
+    max-width: 1000px;
+    /* we wanna keep the same margin size of small screens */
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  /* the plus combinator will see the siblings */
+  .service + .service {
+    margin-left: 2em;
+  }
+}
+
+/* About me section */
+.about-me {
+  max-width: 1000px; /* same as services */
+  margin: 0 auto;
+}
+
+.about-me__img{
+  box-shadow: var(--bs);
+}
+
+@media (min-width: 600px) {
+  .about-me {
+    display: grid;
+    grid-template-columns: 1fr 200px; /* depending on image size */
+    grid-template-areas:
+      "title img"
+      "subtitle img"
+      "text img";
+    grid-column-gap: 2em;
+  }
+  
+  .section__title--about {
+    grid-area: title;
+  }
+
+  .section__subtitle--about {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    position: relative;
+    left: -1em;
+    width: calc(100% + 2em);
+    /*height: 50%;*/
+    padding-left: 1em;
+    padding-right: cal(200px + 4em); /* that will never let text touch image */
+
+  }
+
+  .about-me__img {
+    grid-area: img;
+    position: relative;
+    z-index: 2;
+  }
+}
+
+/* My work section */
+/* we will not need media query because we use grid */
+.my-work {
+  background-color: var(--clr-dark);
+  color: var(--clr-light);
+  text-align: center;
+}
+
+/* Typography */
+.section__subtitle--work {
+  color: var(--clr-accent);
+  font-weight: var(--fw-bold);
+  margin-bottom: 2em;
+}
+
+.portfolio {
+  display: grid;
+  /* grid-template-columns: repeat(2, 1fr) */ /* change 2 to change No. of columns */
+  /* auto-fit will make it change apon changes of screen sizes */
+  grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); 
+}
+
+.portfolio__item {
+  background: var(--clr-accent);
+  overflow: hidden; /* when it grows it grows within picture box without floating out */
+}
+
+.portfolio__img {
+  transition:
+    trasform 750ms cubic-bezier(.5,0,.5,1),
+    opacity 250ms linear;
+}
+
+.portfolio__item:focus {
+  position: relative;
+  z-index: 2;
+}
+
+.portfolio__img:hover,
+.portfolio__item:focus .portfolio__img {
+  transform: scale(1.2);
+  opacity: .5; /*  opacity of the green color effect */
+
+}
+
+/* Footer */
+
+.footer {
+  background: #111;
+  color: var(--clr-accent);
+  text-align: center;
+  padding: 2.5em 0;
+  font-size: var(--fs-h3);
+}
+
+ /* link color */
+.footer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer__link {
+  font-weight: var(--fw-bold);
+}
+
+/* link hover */
+.footer__link:hover,
+.social-list__link:hover {
+  opacity: .7;
+}
+
+.footer__link:hover {
+  text-decoration: underline;
+}
+
+.social-list {
+  list-style: none;
+  display: flex; /* will put icons next to each other */
+  justify-content: center;
+  margin: 2em 0 0;
+  padding: 0;
+}
+
+.social-list__item {
+  margin: 0 .5em;
+}
+
+.social-list__link {
+  padding: .5em
+}
